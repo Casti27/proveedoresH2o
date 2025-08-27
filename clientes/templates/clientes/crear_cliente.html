@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Proveedor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #1d3557;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        form p {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #1d3557;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #16324f;
+        }
+
+        /* --- Estilos del mensaje elegante --- */
+        .notificacion {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+            font-size: 15px;
+            font-weight: 500;
+            z-index: 1000;
+            animation: fadeIn 0.5s;
+        }
+
+        .notificacion.ocultar {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .notificacion strong {
+            color: #ffd166;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Registrar Proveedor</h1>
+
+    <!-- Mensaje flotante -->
+    <div id="notificacion" class="notificacion">
+        ✅ Gracias por registrar al proveedor.<br>
+        Recuerde que todas las facturas electrónicas deben ser enviadas a 
+        <strong>facturacion@h2ocolombia.com</strong>.
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="formulario-proveedor">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+
+    <script>
+        const formulario = document.getElementById('formulario-proveedor');
+        const notificacion = document.getElementById('notificacion');
+
+        formulario.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita envío inmediato
+
+            // Mostrar notificación
+            notificacion.style.display = 'block';
+
+            // Ocultar después de 10 segundos y enviar formulario
+            setTimeout(() => {
+                notificacion.classList.add('ocultar');
+                setTimeout(() => {
+                    notificacion.style.display = 'none';
+                    event.target.submit(); // Envía el formulario
+                }, 500); // tiempo del fadeOut
+            }, 10000);
+        });
+
+        // --- Mostrar/ocultar campos de crédito según forma de pago ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const formaPago = document.getElementById('id_forma_pago');
+            const cupoCredito = document.getElementById('id_cupo_credito').closest('p');
+            const plazoCredito = document.getElementById('id_plazo_credito').closest('p');
+
+            function toggleCreditoFields() {
+                if (formaPago.value === 'credito') {
+                    cupoCredito.style.display = 'block';
+                    plazoCredito.style.display = 'block';
+                } else {
+                    cupoCredito.style.display = 'none';
+                    plazoCredito.style.display = 'none';
+                }
+            }
+
+            formaPago.addEventListener('change', toggleCreditoFields);
+            toggleCreditoFields();
+        });
+    </script>
+</body>
+</html>
