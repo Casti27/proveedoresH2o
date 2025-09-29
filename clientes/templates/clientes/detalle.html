@@ -112,9 +112,23 @@
 
     <div class="section">
         <h2>Archivos adjuntos</h2>
-        <p><a href="{{ cliente.rut.url }}" target="_blank">Ver RUT</a></p>
-        <p><a href="{{ cliente.certificacion_bancaria.url }}" target="_blank">Ver Certificación bancaria</a></p>
-        <p><a href="{{ cliente.camara_comercio.url }}" target="_blank">Ver Cámara de Comercio</a></p>
+        {% if cliente.rut %}
+            <p><a href="{{ cliente.rut.url }}" target="_blank">Ver RUT</a></p>
+        {% else %}
+            <p>No hay RUT cargado</p>
+        {% endif %}
+
+        {% if cliente.certificacion_bancaria %}
+            <p><a href="{{ cliente.certificacion_bancaria.url }}" target="_blank">Ver Certificación bancaria</a></p>
+        {% else %}
+            <p>No hay certificación bancaria cargada</p>
+        {% endif %}
+
+        {% if cliente.camara_comercio %}
+            <p><a href="{{ cliente.camara_comercio.url }}" target="_blank">Ver Cámara de Comercio</a></p>
+        {% else %}
+            <p>No hay Cámara de Comercio cargada</p>
+        {% endif %}
     </div>
 </body>
 </html>

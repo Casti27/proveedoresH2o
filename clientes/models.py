@@ -50,7 +50,7 @@ class Cliente(models.Model):
     ciudad_banco = models.CharField(max_length=100, blank=True, null=True)
 
     # Forma de pago
-    forma_pago = models.CharField(max_length=10, choices=[('credito', 'Crédito'), ('contado', 'Contado')])
+    forma_pago = models.CharField(max_length=25, choices=[('credito', 'Crédito'), ('contado', 'Contado'), ('servicio', 'Prestación de servicios')])
     cupo_credito = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     plazo_credito = models.PositiveIntegerField(blank=True, null=True, help_text="Días")
 
