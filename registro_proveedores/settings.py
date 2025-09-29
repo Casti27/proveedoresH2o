@@ -127,12 +127,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://5594ce03ec93.ngrok-free.app"
+    "https://1d12e7b98957.ngrok-free.app"
 ]
 
 import os
 
-SITE_URL = "https://5594ce03ec93.ngrok-free.app"
+SITE_URL = "https://1d12e7b98957.ngrok-free.app"
 
 
 MEDIA_URL = '/media/'

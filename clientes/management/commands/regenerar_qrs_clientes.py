@@ -1,33 +1,16 @@
-from django.db import models
-from django.conf import settings
-import qrcode
-from io import BytesIO
-from django.core.files.base import ContentFile
-import os
+# clientes/management/commands/regenerar_qrs_clientes.py
+from django.core.management.base import BaseCommand
+from clientes.models import Cliente
 
-class Cliente(models.Model):
-    nombre = models.CharField(max_length=100)
-    qr_code = models.ImageField(upload_to="qrs/", blank=True, null=True)
+class Command(BaseCommand):
+    help = "Regenera los códigos QR de todos los clientes con la URL actual."
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)  # guarda primero el objeto
+    def handle(self, *args, **kwargs):
+        clientes = Cliente.objects.all()
+        total = clientes.count()
 
-        # Generar URL actual
-        url = f"{settings.SITE_URL}/cliente/{self.pk}/"
+        for i, cliente in enumerate(clientes, start=1):
+            cliente.save()  # Esto regenera el QR usando la lógica en models.py
+            self.stdout.write(f"[{i}/{total}] QR actualizado para: {cliente}")
 
-        # Generar QR
-        qr = qrcode.make(url)
-        buffer = BytesIO()
-        qr.save(buffer, format="PNG")
-
-        # Nombre fijo para este cliente (se sobrescribe siempre)
-        filename = f"qrs/qr_{self.pk}.png"
-
-        # Si ya existe, eliminarlo antes de sobrescribir
-        if self.qr_code and os.path.isfile(self.qr_code.path):
-            os.remove(self.qr_code.path)
-
-        # Guardar el QR en el mismo nombre
-        self.qr_code.save(filename, ContentFile(buffer.getvalue()), save=False)
-
-        super().save(update_fields=["qr_code"])
+        self.stdout.write(self.style.SUCCESS("✅ Todos los QRs fueron regenerados con la URL actual."))

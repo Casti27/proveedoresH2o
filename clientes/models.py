@@ -4,6 +4,7 @@ from io import BytesIO
 import qrcode
 from django.urls import reverse
 from django.conf import settings
+import os
 
 
 class Cliente(models.Model):
@@ -72,8 +73,16 @@ class Cliente(models.Model):
         qr = qrcode.make(qr_data)
         buffer = BytesIO()
         qr.save(buffer, format='PNG')
-        file_name = f'cliente_{self.id}.png'
 
+        # 🔑 Nombre FIJO
+        file_name = f'cliente_{self.id}.png'
+        file_path = os.path.join(settings.MEDIA_ROOT, 'qrcodes', file_name)
+
+        # 🗑️ Si ya existe, eliminarlo antes de sobrescribir
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        # Guardar QR
         self.qr_image.save(file_name, ContentFile(buffer.getvalue()), save=False)
 
         super().save(update_fields=['qr_image'])
