@@ -119,20 +119,12 @@
         const formulario = document.getElementById('formulario-proveedor');
         const notificacion = document.getElementById('notificacion');
 
-        formulario.addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita envío inmediato
-
-            // Mostrar notificación
+        // Mostrar notificación al enviar, pero dejar que el formulario se envíe normalmente
+        formulario.addEventListener('submit', function() {
             notificacion.style.display = 'block';
-
-            // Ocultar después de 10 segundos y enviar formulario
             setTimeout(() => {
                 notificacion.classList.add('ocultar');
-                setTimeout(() => {
-                    notificacion.style.display = 'none';
-                    event.target.submit(); // Envía el formulario
-                }, 500); // tiempo del fadeOut
-            }, 10000);
+            }, 10000); // desaparece después de 10 segundos
         });
 
         // --- Mostrar/ocultar campos de crédito según forma de pago ---
