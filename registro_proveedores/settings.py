@@ -72,6 +72,7 @@ DATABASES = {
     }
 }
 
+
 db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=False)
 if db_from_env:
     DATABASES['default'] = db_from_env
