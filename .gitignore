@@ -1,0 +1,21 @@
+# Entorno virtual
+venv/
+
+# Archivos compilados
+__pycache__/
+*.pyc
+
+# Base de datos local
+db.sqlite3
+
+# Archivos estáticos generados
+/staticfiles
+
+# Configuraciones del sistema
+.DS_Store
+
+# Archivos de logs o temporales
+*.log
+*.pot
+*.py[cod]
+*$py.class
